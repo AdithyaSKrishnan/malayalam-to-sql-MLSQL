@@ -1,0 +1,18 @@
+target/
+*.class
+.idea/
+*.iml
+.DS_Store
+*.log
+.settings/
+.classpath
+.project
+.vscode/
+
+# Fine-tuning pipeline
+finetuning/data/
+finetuning/sarvam-malayalam-sql-lora/
+__pycache__/
+*.pyc
+*.pyo
+.env
