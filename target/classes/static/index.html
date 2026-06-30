@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLSQL — Malayalam & SQL to NoSQL Converter</title>
+    <meta name="description"
+        content="Convert SQL queries and Malayalam natural language questions to MongoDB NoSQL queries instantly using AI-powered translation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Animated background blobs -->
+    <div class="bg-blobs" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand">
+                <div class="logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect x="2" y="2" width="24" height="24" rx="6" stroke="url(#logo-grad)" stroke-width="2.5" />
+                        <path d="M8 10h12M8 14h8M8 18h10" stroke="url(#logo-grad)" stroke-width="2"
+                            stroke-linecap="round" />
+                        <defs>
+                            <linearGradient id="logo-grad" x1="2" y1="2" x2="26" y2="26">
+                                <stop stop-color="#60a5fa" />
+                                <stop offset="1" stop-color="#a78bfa" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">MLSQL</span>
+            </div>
+            <div class="nav-links">
+                <a href="https://github.com/abhinav-rs/MLSQL-Phase1" target="_blank" class="nav-link" id="githubLink">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero" id="hero">
+            <h1 class="hero-title">
+                <span class="gradient-text">Query Converter</span>
+            </h1>
+            <p class="hero-subtitle">Transform SQL & Malayalam into MongoDB — powered by AI</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tab-bar" id="tabBar">
+            <button class="tab active" data-tab="sql" id="tabSql">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                SQL → NoSQL
+            </button>
+            <button class="tab" data-tab="malayalam" id="tabMalayalam">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                മലയാളം → NoSQL
+            </button>
+            <div class="tab-indicator" id="tabIndicator"></div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+
+            <!-- ═══════════ SQL TAB ═══════════ -->
+            <section class="tab-panel active" data-panel="sql" id="panelSql">
+                <div class="converter-grid">
+                    <div class="input-column">
+                        <div class="glass-card" id="sqlInputCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-blue"></span>
+                                    SQL Query
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <textarea id="sqlInput" placeholder="SELECT * FROM users WHERE age > 25"
+                                    spellcheck="false"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="glass-card" id="sqlSchemaCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-purple"></span>
+                                    Schema JSON
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <textarea id="sqlSchemaInput" placeholder='{"users": {"type": "collection"}}'
+                                    spellcheck="false"></textarea>
+                            </div>
+                        </div>
+
+                        <button id="convertBtn" class="action-btn">
+                            <span class="btn-content">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="13 17 18 12 13 7"></polyline>
+                                    <polyline points="6 17 11 12 6 7"></polyline>
+                                </svg>
+                                Convert to MongoDB
+                            </span>
+                            <span class="btn-loader" hidden>
+                                <span class="spinner"></span>
+                                Converting…
+                            </span>
+                        </button>
+                    </div>
+
+                    <div class="output-column">
+                        <div class="glass-card full-height" id="sqlOutputCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-green"></span>
+                                    MongoDB Query
+                                </div>
+                                <button id="sqlCopyBtn" class="icon-btn" title="Copy to Clipboard">
+                                    <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"
+                                        stroke-linejoin="round" hidden>
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="output-area">
+                                    <pre><code id="sqlMongoOutput" class="output-placeholder">// Result will appear here…</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════ MALAYALAM TAB ═══════════ -->
+            <section class="tab-panel" data-panel="malayalam" id="panelMalayalam">
+                <div class="converter-grid">
+                    <div class="input-column">
+                        <div class="glass-card" id="mlQuestionCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-amber"></span>
+                                    മലയാളം ചോദ്യം
+                                    <span class="badge">Malayalam</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <textarea id="malayalamInput"
+                                    placeholder="25 വയസ്സിന് മുകളിലുള്ള എല്ലാ വിദ്യാർത്ഥികളെയും കാണിക്കുക"
+                                    spellcheck="false"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="glass-card" id="mlSchemaCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-purple"></span>
+                                    Schema JSON
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <textarea id="mlSchemaInput" placeholder='{"students": {"type": "collection"}}'
+                                    spellcheck="false"></textarea>
+                            </div>
+                        </div>
+
+                        <button id="malayalamConvertBtn" class="action-btn action-btn-gradient">
+                            <span class="btn-content">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path
+                                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                    </path>
+                                </svg>
+                                Translate &amp; Convert
+                            </span>
+                            <span class="btn-loader" hidden>
+                                <span class="spinner"></span>
+                                Processing…
+                            </span>
+                        </button>
+                    </div>
+
+                    <div class="output-column">
+                        <!-- Generated SQL output -->
+                        <div class="glass-card" id="mlSqlOutputCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-blue"></span>
+                                    Generated SQL
+                                    <span class="badge badge-info">Intermediate</span>
+                                </div>
+                                <button id="mlSqlCopyBtn" class="icon-btn" title="Copy SQL">
+                                    <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"
+                                        stroke-linejoin="round" hidden>
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="output-area">
+                                    <pre><code id="mlSqlOutput" class="output-placeholder">// Generated SQL will appear here…</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MongoDB output -->
+                        <div class="glass-card" id="mlMongoOutputCard">
+                            <div class="card-header">
+                                <div class="card-label">
+                                    <span class="dot dot-green"></span>
+                                    MongoDB Query
+                                    <span class="badge badge-success">Final</span>
+                                </div>
+                                <button id="mlMongoCopyBtn" class="icon-btn" title="Copy MongoDB Query">
+                                    <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"
+                                        stroke-linejoin="round" hidden>
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="output-area">
+                                    <pre><code id="mlMongoOutput" class="output-placeholder">// MongoDB query will appear here…</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer" id="footer">
+            <p>Built with <span class="heart">♥</span> — MLSQL Phase 1</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

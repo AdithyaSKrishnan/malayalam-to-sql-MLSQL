@@ -1,0 +1,28 @@
+### 1. Test Spring Boot: Direct SQL to NoSQL Conversion
+POST http://localhost:8080/api/convert
+Content-Type: application/json
+
+{
+    "sql": "SELECT name, age FROM users WHERE age > 18",
+    "schema": "{\"users\": { \"name\": \"string\", \"age\": \"number\" }}"
+}
+
+### 2. Test Spring Boot: Full Pipeline (Malayalam -> NoSQL)
+# (Requires both Spring Boot on 8080 and Python Flask on 5000 to be running)
+POST http://localhost:8080/api/malayalam-to-nosql
+Content-Type: application/json
+
+{
+    "question": "18 വയസ്സിനു മുകളിലുള്ള ഉപയോക്താക്കളുടെ പേരും പ്രായവും കാണിക്കുക",
+    "schema": "{\"users\": { \"name\": \"string\", \"age\": \"number\" }}"
+}
+
+### 3. Test Python Inference Server Directly (Malayalam -> SQL)
+# (Requires Python Flask on 5000 to be running)
+POST http://localhost:5000/api/malayalam-to-sql
+Content-Type: application/json
+
+{
+    "question": "18 വയസ്സിനു മുകളിലുള്ള ഉപയോക്താക്കളുടെ പേരും പ്രായവും കാണിക്കുക",
+    "schema": "{\"users\": { \"name\": \"string\", \"age\": \"number\" }}"
+}
